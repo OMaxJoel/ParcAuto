@@ -7,10 +7,12 @@ import com.ccc.parcauto.chauffeur.service.ChauffeursService;
 import com.ccc.parcauto.exceptions.EntityAlreadyExistException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ChauffeursServiceImpl implements ChauffeursService {
     @Autowired
     ChauffeursRepository repository;
