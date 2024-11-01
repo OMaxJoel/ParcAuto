@@ -21,7 +21,7 @@ import java.math.BigInteger;
 @Entity
 public class DetailBesoins extends AbstractEntity {
 private String description;
-private Integer qte;
+private BigInteger qte;
 private BigInteger prix_u;
 private BigInteger totalBesoins;
 

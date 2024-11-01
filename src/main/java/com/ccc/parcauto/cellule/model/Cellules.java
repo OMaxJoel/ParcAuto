@@ -38,9 +38,6 @@ public class Cellules extends AbstractEntity {
     private Services services;
 
     @OneToMany(mappedBy = "cellules")
-    private List<Besoins> besoins;
-
-    @OneToMany(mappedBy = "cellules")
     private List<Affectations> affectations;
 
     @OneToMany(mappedBy = "cellules")
