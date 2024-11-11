@@ -1,8 +1,14 @@
+# Étape 1 : Construction de l'application
 FROM maven:3.8.5-openjdk-17 AS build
-COPY . .
-RUN mvn clean package =DskipTests
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+COPY src ./src
+RUN mvn package -DskipTests
 
+# Étape 2 : Création de l'image exécutable
 FROM openjdk:17-jdk-slim
-COPY --from=build /target/parcauto-1.0-SNAPSHOT parcauto.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/parcauto.jar"]
+VOLUME /tmp
+ARG JAR_FILE=/app/target/*.jar
+COPY --from=build ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
