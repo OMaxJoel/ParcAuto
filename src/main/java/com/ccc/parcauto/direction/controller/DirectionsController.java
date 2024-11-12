@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/directions")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class DirectionsController {
     @Autowired
     DirectionsService service;
