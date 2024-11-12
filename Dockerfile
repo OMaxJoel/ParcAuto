@@ -1,30 +1,15 @@
-# Utiliser une image de base Java 17
-FROM openjdk:17-jdk-slim as builder
-
-# Définir le répertoire de travail dans le container
+# Étape 1 : Construction de l'application
+FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
-
-# Copier le fichier pom.xml et télécharger les dépendances
 COPY pom.xml .
-RUN ./mvnw dependency:go-offline
-
-# Copier le reste des fichiers du projet
+RUN mvn dependency:go-offline -B
 COPY src ./src
+RUN mvn package -DskipTests
 
-# Construire l'application
-RUN ./mvnw clean package -DskipTests
-
-# Étape de production
+# Étape 2 : Création de l'image exécutable
 FROM openjdk:17-jdk-slim
-
-# Définir le répertoire de travail
-WORKDIR /app
-
-# Copier le fichier jar depuis l'étape builder
-COPY --from=builder /app/target/*.jar app.jar
-
-# Définir la commande pour exécuter l'application
-ENTRYPOINT ["java", "-jar", "app.jar"]
-
-# Exposer le port 8080
+VOLUME /tmp
+ARG JAR_FILE=/app/target/*.jar
+COPY --from=build ${JAR_FILE} app.jar
 EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app.jar"]
